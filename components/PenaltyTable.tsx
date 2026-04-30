@@ -153,10 +153,12 @@ export const PenaltyTable: React.FC<PenaltyTableProps> = ({
             String(s.name || '').toLowerCase().includes(query) ||
             String(s.assistant || '').toLowerCase().includes(query) ||
             String(s.teachers || '').toLowerCase().includes(query) ||
+            String(s.teacher || '').toLowerCase().includes(query) ||
             String(s.level || '').toLowerCase().includes(query) ||
+            String(s.behavior || '').toLowerCase().includes(query) ||
             String(s.time || '').toLowerCase().includes(query);
         
-        const matchesTeacher = !filters.teacher || String(s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase());
+        const matchesTeacher = !filters.teacher || String(s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase()) || String(s.teacher || '').toUpperCase().includes(filters.teacher.toUpperCase());
         const matchesAssistant = !filters.assistant || String(s.assistant || '').toUpperCase().includes(filters.assistant.toUpperCase());
         const matchesLevel = !filters.level || String(s.level || '').toUpperCase().includes(filters.level.toUpperCase());
         const matchesVisibility = filters.showHidden || !s.isHidden;
@@ -195,14 +197,14 @@ export const PenaltyTable: React.FC<PenaltyTableProps> = ({
 
   const getRowBg = (idx: number) => {
     const colors = [
-      'bg-emerald-100/30',
-      'bg-emerald-100/30',
-      'bg-amber-100/30',
-      'bg-indigo-100/30',
-      'bg-rose-100/30',
-      'bg-violet-100/30',
-      'bg-teal-100/30',
-      'bg-orange-100/30'
+      'bg-emerald-100/90',
+      'bg-emerald-100/90',
+      'bg-amber-100/90',
+      'bg-indigo-100/90',
+      'bg-rose-100/90',
+      'bg-violet-100/90',
+      'bg-teal-100/90',
+      'bg-orange-100/90'
     ];
     return colors[idx % colors.length];
   };
@@ -330,9 +332,9 @@ export const PenaltyTable: React.FC<PenaltyTableProps> = ({
 
       {/* Spreadsheet Content */}
       <div className="flex-1 overflow-auto bg-transparent p-4">
-          <div className="h-full bg-white/[0.02] backdrop-blur-[2px] border border-white/5 rounded-2xl shadow-xl overflow-auto relative">
+          <div className="h-full bg-white/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-auto relative">
               <table className="w-full border-collapse table-fixed min-w-[1400px]">
-                  <thead className="sticky top-0 z-40 bg-white/[0.02] backdrop-blur-[2px] border-b border-white/5">
+                  <thead className="sticky top-0 z-40 bg-slate-50/80 backdrop-blur-md border-b border-slate-200/50">
                       <tr>
                         <th className="w-10 border-r border-white/5 text-[10px] font-black text-slate-900 sticky top-0 bg-white">
                           <div className="flex items-center justify-center">

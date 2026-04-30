@@ -16,6 +16,18 @@ export interface ColumnConfig {
   type: 'text' | 'date' | 'boolean' | 'select';
 }
 
+export const DEFAULT_COLUMNS: ColumnConfig[] = [
+  { id: 'c2', key: 'teachers', label: 'TEACHERS', width: 180, visible: true, type: 'text' },
+  { id: 'c9', key: 'assistant', label: 'ASSISTANT', width: 150, visible: true, type: 'text' },
+  { id: 'c3', key: 'level', label: 'LEVEL', width: 85, visible: true, type: 'text' },
+  { id: 'c5', key: 'behavior', label: 'BEHAVIOR', width: 180, visible: true, type: 'text' },
+  { id: 'c_schedule', key: 'schedule', label: 'SCHEDULE', width: 140, visible: true, type: 'text' },
+  { id: 'c4', key: 'time', label: 'TIME', width: 110, visible: true, type: 'text' },
+  { id: 'c6', key: 'duration', label: 'DURATION', width: 100, visible: true, type: 'text' },
+  { id: 'c7', key: 'startDate', label: 'START', width: 100, visible: true, type: 'text' },
+  { id: 'c8', key: 'deadline', label: 'DEADLINE', width: 100, visible: true, type: 'text' }
+];
+
 export interface CurrentUser {
   name: string;
   role: UserRole;

@@ -231,11 +231,11 @@ const DPSSTable: React.FC<DPSSTableProps> = ({ data, onUpdate }) => {
       {/* Resizable Sidebar with Fonts */}
       <div 
         style={{ width: `${sidebarWidth}px` }}
-        className="bg-white/10 backdrop-blur-md rounded-3xl p-4 border border-white/20 flex flex-col gap-4 overflow-hidden relative group/sidebar"
+        className="bg-white/80 backdrop-blur-md rounded-3xl p-4 border border-white/20 flex flex-col gap-4 overflow-hidden relative group/sidebar shadow-xl"
       >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-black text-slate-800 tracking-tight">DPSS Portal</h2>
-          <span className="text-[10px] bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase">Hall Study</span>
+          <span className="text-[10px] bg-orange-100/50 text-orange-600 px-2 py-0.5 rounded-full font-bold uppercase">Hall Study</span>
         </div>
 
         <button onClick={() => addTopic()} className="w-full py-3 bg-orange-500 text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-orange-600 shadow-lg shadow-orange-200 transition-all mt-4">
@@ -256,7 +256,7 @@ const DPSSTable: React.FC<DPSSTableProps> = ({ data, onUpdate }) => {
       </div>
       
       {/* Editor Area */}
-      <div className="flex-1 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 relative flex flex-col overflow-hidden">
+      <div className="flex-1 bg-white/80 backdrop-blur-md rounded-3xl border border-white/20 relative flex flex-col overflow-hidden shadow-xl">
         {selectedTopic ? (
             <div className="flex-1 flex flex-col overflow-hidden">
                 <div className="p-6 border-b border-white/10 bg-white/5">

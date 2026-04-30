@@ -122,10 +122,12 @@ export const FinanceTable: React.FC<Props> = ({ students, data, onUpdate, onQuic
         (s.name || '').toLowerCase().includes(query) || 
         (s.displayId || '').toLowerCase().includes(query) ||
         (s.assistant || '').toLowerCase().includes(query) ||
-        (s.teachers || '').toLowerCase().includes(query);
+        (s.teachers || '').toLowerCase().includes(query) ||
+        (s.teacher || '').toLowerCase().includes(query);
 
       const matchesTeacher = !filters.teacher || 
-          (s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase());
+          (s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase()) ||
+          (s.teacher || '').toUpperCase().includes(filters.teacher.toUpperCase());
           
       const matchesAssistant = !filters.assistant || 
           (s.assistant || '').toUpperCase().includes(filters.assistant.toUpperCase());
@@ -143,14 +145,14 @@ export const FinanceTable: React.FC<Props> = ({ students, data, onUpdate, onQuic
 
   const getRowBg = (idx: number): string => {
     const colors = [
-      'bg-emerald-400/5',
-      'bg-emerald-400/5',
-      'bg-amber-400/5',
-      'bg-indigo-400/5',
-      'bg-rose-400/5',
-      'bg-violet-400/5',
-      'bg-teal-400/5',
-      'bg-orange-400/5'
+      'bg-emerald-400/90',
+      'bg-emerald-400/90',
+      'bg-amber-400/90',
+      'bg-indigo-400/90',
+      'bg-rose-400/90',
+      'bg-violet-400/90',
+      'bg-teal-400/90',
+      'bg-orange-400/90'
     ];
     return colors[idx % colors.length];
   };
@@ -196,8 +198,8 @@ export const FinanceTable: React.FC<Props> = ({ students, data, onUpdate, onQuic
   );
 
   return (
-    <div className={`flex flex-col h-full rounded-[40px] shadow-2xl shadow-indigo-900/10 border border-white/5 overflow-hidden relative ${isLocked ? 'bg-white/[0.01] backdrop-blur-[1px] grayscale-[0.3]' : 'bg-white/[0.01] backdrop-blur-[1px]'}`}>
-      <div className={`p-4 border-b border-white/5 flex-none backdrop-blur-[1px] ${isLocked ? 'bg-white/[0.01]' : 'bg-white/[0.01]'}`}>
+    <div className={`flex flex-col h-full rounded-[40px] shadow-2xl shadow-indigo-900/10 border border-white/20 overflow-hidden relative ${isLocked ? 'bg-white/80 backdrop-blur-md grayscale-[0.3]' : 'bg-white/80 backdrop-blur-md'}`}>
+      <div className={`p-4 border-b border-slate-200/50 flex-none backdrop-blur-md ${isLocked ? 'bg-slate-50/50' : 'bg-slate-50/50'}`}>
         <div className="flex justify-between items-center mb-3">
              <div className="flex items-center gap-4">
                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md ${isLocked ? 'bg-red-500/80' : 'bg-orange-500/80'}`}>

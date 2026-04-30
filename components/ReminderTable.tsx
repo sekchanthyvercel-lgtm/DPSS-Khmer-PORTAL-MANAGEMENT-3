@@ -102,10 +102,13 @@ const ReminderTable: React.FC<ReminderTableProps> = ({
       const matchesSearch = !query || 
              (s.name || '').toLowerCase().includes(query) || 
              (s.note || '').toLowerCase().includes(query) ||
-             (s.status || '').toLowerCase().includes(query);
+             (s.status || '').toLowerCase().includes(query) ||
+             (s.teachers || '').toLowerCase().includes(query) ||
+             (s.teacher || '').toLowerCase().includes(query);
 
       const matchesTeacher = !filters.teacher || 
-          (s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase());
+          (s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase()) ||
+          (s.teacher || '').toUpperCase().includes(filters.teacher.toUpperCase());
           
       const matchesAssistant = !filters.assistant || 
           (s.assistant || '').toUpperCase().includes(filters.assistant.toUpperCase());
@@ -153,7 +156,7 @@ const ReminderTable: React.FC<ReminderTableProps> = ({
   };
 
   const getRowBg = (idx: number) => {
-    const colors = ['bg-emerald-400/5', 'bg-amber-400/5', 'bg-indigo-400/5', 'bg-rose-400/5', 'bg-violet-400/5', 'bg-teal-400/5', 'bg-orange-400/5'];
+    const colors = ['bg-emerald-400/90', 'bg-amber-400/90', 'bg-indigo-400/90', 'bg-rose-400/90', 'bg-violet-400/90', 'bg-teal-400/90', 'bg-orange-400/90'];
     return colors[idx % colors.length];
   };
 
@@ -223,10 +226,10 @@ const ReminderTable: React.FC<ReminderTableProps> = ({
                         return (
                             <div 
                                 key={idx} 
-                                className={`relative rounded-[24px] p-3 border transition-all flex flex-col group/day 
-                                    ${isCurrentMonth ? 'bg-white/10 border-white/10 backdrop-blur-sm' : 'bg-white/5 border-white/5 opacity-40'}
+                                className={`relative rounded-[24px] p-3 border transition-all flex flex-col group/day shadow-sm
+                                    ${isCurrentMonth ? 'bg-white/80 border-white/20 backdrop-blur-md' : 'bg-white/40 border-white/10 opacity-60'}
                                     ${isToday ? 'ring-2 ring-orange-500 ring-offset-2 ring-offset-transparent' : ''}
-                                    hover:bg-white/20 hover:border-white/30 hover:shadow-xl hover:-translate-y-1
+                                    hover:bg-white hover:border-white/30 hover:shadow-xl hover:-translate-y-1
                                 `}
                             >
                                 <div className="flex justify-between items-start mb-2">
@@ -264,10 +267,10 @@ const ReminderTable: React.FC<ReminderTableProps> = ({
             </div>
         </div>
       ) : (
-        <div className="flex-1 bg-white/5 backdrop-blur-[1px] rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-white/10 mx-8 mb-8">
+        <div className="flex-1 bg-white/80 backdrop-blur-md rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-white/10 mx-8 mb-8">
             <div className="overflow-auto flex-1 custom-scrollbar">
                 <table className="w-full border-collapse table-fixed min-w-[900px]">
-                    <thead className="sticky top-0 z-40 bg-white/10 backdrop-blur-md">
+                    <thead className="sticky top-0 z-40 bg-slate-50/80 backdrop-blur-md">
                         <tr className="border-b border-white/5">
                             <th className="w-16 h-14 text-[10px] font-black text-slate-900 uppercase tracking-widest">#</th>
                             <th className="w-64 text-left px-4 text-[10px] font-black text-slate-900 uppercase tracking-widest">Task / Item</th>

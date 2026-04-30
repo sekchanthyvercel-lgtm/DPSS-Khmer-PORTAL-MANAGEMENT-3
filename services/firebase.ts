@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, onSnapshot, setDoc, getDocFromServer, serverTimestamp } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth'; 
-import { AppData, BackupEntry } from '../types';
+import { AppData, BackupEntry, DEFAULT_COLUMNS } from '../types';
 import firebaseConfig from '../firebase-applet-config.json';
 
 // --- Error Handling ---
@@ -85,7 +85,7 @@ export const subscribeToData = (
     } else {
       const initialData: AppData = { 
         students: [], 
-        settings: { fontSize: 12, fontFamily: "'Inter', sans-serif", columns: [], backgroundImage: '' },
+        settings: { fontSize: 12, fontFamily: "'Inter', sans-serif", columns: DEFAULT_COLUMNS, backgroundImage: '' },
         attendance: {},
         moduleLocks: {},
         staffDirectory: {},

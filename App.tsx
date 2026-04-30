@@ -15,23 +15,11 @@ import ReminderTable from './components/ReminderTable';
 import DPSSTable from './components/DPSSTable';
 import { RecycleBin } from './components/RecycleBin';
 import { Dashboard } from './components/Dashboard';
-import { AppData, Student, CurrentUser, UserRole, ColumnConfig, Tab, ViewMode, AppSettings, StudentCategory } from './types';
+import { AppData, Student, CurrentUser, UserRole, ColumnConfig, Tab, ViewMode, AppSettings, StudentCategory, DEFAULT_COLUMNS } from './types';
 import { subscribeToData, saveData } from './services/firebase';
 import { Menu, X } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { addMonths, format } from 'date-fns';
-
-const DEFAULT_COLUMNS: ColumnConfig[] = [
-  { id: 'c2', key: 'teachers', label: 'TEACHERS', width: 180, visible: true, type: 'text' },
-  { id: 'c9', key: 'assistant', label: 'ASSISTANT', width: 150, visible: true, type: 'text' },
-  { id: 'c3', key: 'level', label: 'LEVEL', width: 85, visible: true, type: 'text' },
-  { id: 'c5', key: 'behavior', label: 'BEHAVIOR', width: 180, visible: true, type: 'text' },
-  { id: 'c_schedule', key: 'schedule', label: 'SCHEDULE', width: 140, visible: true, type: 'text' },
-  { id: 'c4', key: 'time', label: 'TIME', width: 110, visible: true, type: 'text' },
-  { id: 'c6', key: 'duration', label: 'DURATION', width: 100, visible: true, type: 'text' },
-  { id: 'c7', key: 'startDate', label: 'START', width: 100, visible: true, type: 'text' },
-  { id: 'c8', key: 'deadline', label: 'DEADLINE', width: 100, visible: true, type: 'text' }
-];
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(() => {
@@ -228,40 +216,56 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!currentUser) return;
     const unsubscribe = subscribeToData((newData) => {
-      // Ensure DEFAULT_COLUMNS are initialized
-      if (!newData.settings?.columns) {
-          newData.settings = { ...(newData.settings || { fontSize: 12, fontFamily: "'Inter', sans-serif" }), columns: DEFAULT_COLUMNS };
+      // Ensure settings and columns exist
+      if (!newData.settings) {
+        newData.settings = { fontSize: 12, fontFamily: "'Inter', sans-serif", columns: DEFAULT_COLUMNS, backgroundImage: localBackground };
+      }
+      
+      if (!newData.settings.columns || newData.settings.columns.length === 0) {
+          newData.settings.columns = DEFAULT_COLUMNS;
       } else {
+        let hasChanges = false;
         // Migration: Remove redundant 'name' or 'Full Name' column if it exists in settings
         const filteredCols = newData.settings.columns.filter((c: any) => 
           c.key !== 'name' && c.label?.toUpperCase() !== 'FULL NAME'
         );
+        
         if (filteredCols.length !== newData.settings.columns.length) {
           newData.settings.columns = filteredCols;
+          hasChanges = true;
         }
 
-        // Migration: Ensure 'schedule' column exists if missing
-        const hasSchedule = newData.settings.columns.some((c: any) => c.key === 'schedule');
-        if (!hasSchedule) {
-          const newCols = [...newData.settings.columns];
-          // Try to insert after behavior or before time
-          const behaviorIdx = newCols.findIndex((c: any) => c.key === 'behavior');
-          if (behaviorIdx !== -1) {
-            newCols.splice(behaviorIdx + 1, 0, DEFAULT_COLUMNS.find(c => c.key === 'schedule')!);
-          } else {
-            newCols.push(DEFAULT_COLUMNS.find(c => c.key === 'schedule')!);
+        // Aggressive Migration: If core columns are missing, reset to DEFAULT_COLUMNS
+        const coreKeys = ['teachers', 'assistant', 'level', 'behavior', 'time', 'schedule'];
+        const missingCore = coreKeys.some(k => !filteredCols.some((c: any) => c.key === k));
+        
+        if (missingCore) {
+          newData.settings.columns = DEFAULT_COLUMNS;
+          hasChanges = true;
+        } else {
+          // Migration: Ensure ALL default columns exist. If missing, restore them.
+          let colsModified = filteredCols.length !== newData.settings.columns.length;
+          const currentCols = [...filteredCols];
+          
+          DEFAULT_COLUMNS.forEach(defCol => {
+            const existing = currentCols.find((c: any) => c.key === defCol.key);
+            if (!existing) {
+              currentCols.push({ ...defCol, visible: true });
+              colsModified = true;
+            } else if (!existing.visible) {
+              existing.visible = true;
+              colsModified = true;
+            }
+          });
+
+          if (colsModified) {
+            newData.settings.columns = currentCols;
+            hasChanges = true;
           }
-          newData.settings.columns = newCols;
         }
 
-        // Migration: Reorder 'assistant' between 'teachers' and 'level' if it is at the end
-        const assistantIdx = newData.settings.columns.findIndex((c: any) => c.key === 'assistant');
-        const teachersIdx = newData.settings.columns.findIndex((c: any) => c.key === 'teachers');
-        if (assistantIdx !== -1 && teachersIdx !== -1 && assistantIdx > teachersIdx + 1) {
-          const newCols = [...newData.settings.columns];
-          const [assistantCol] = newCols.splice(assistantIdx, 1);
-          newCols.splice(teachersIdx + 1, 0, assistantCol);
-          newData.settings.columns = newCols;
+        if (hasChanges) {
+          saveData(newData);
         }
       }
       setData(newData);

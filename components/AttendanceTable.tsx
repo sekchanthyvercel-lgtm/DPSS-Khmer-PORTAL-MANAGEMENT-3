@@ -37,14 +37,14 @@ const ASSISTANT_COLORS: Record<string, string> = {
 
 const getRowBg = (idx: number): string => {
   const colors = [
-    'bg-emerald-50/10',
-    'bg-emerald-50/10',
-    'bg-amber-50/10',
-    'bg-indigo-50/10',
-    'bg-rose-50/10',
-    'bg-violet-50/10',
-    'bg-teal-50/10',
-    'bg-orange-50/10'
+    'bg-emerald-50/90',
+    'bg-emerald-50/90',
+    'bg-amber-50/90',
+    'bg-indigo-50/90',
+    'bg-rose-50/90',
+    'bg-violet-50/90',
+    'bg-teal-50/90',
+    'bg-orange-50/90'
   ];
   return colors[idx % colors.length];
 };
@@ -192,17 +192,20 @@ export const AttendanceTable: React.FC<Props> = ({
       const query = filters.searchQuery?.toLowerCase() || '';
       const matchesSearch = !query || 
         s.name.toLowerCase().includes(query) ||
-        (s.assistant && s.assistant.toLowerCase().includes(query)) ||
-        (s.time && s.time.toLowerCase().includes(query)) ||
-        (s.teachers && s.teachers.toLowerCase().includes(query));
+        String(s.assistant || '').toLowerCase().includes(query) ||
+        String(s.time || '').toLowerCase().includes(query) ||
+        String(s.level || '').toLowerCase().includes(query) ||
+        String(s.behavior || '').toLowerCase().includes(query) ||
+        String(s.teachers || '').toLowerCase().includes(query) ||
+        String(s.teacher || '').toLowerCase().includes(query);
 
       return (s.category === 'Class' || s.category === 'Hall') && 
         (filters.showHidden || !s.isHidden) && 
         matchesSearch && 
-        (!filters.teacher || (s.teachers && s.teachers.toUpperCase().includes(filters.teacher.toUpperCase()))) && 
-        (!filters.assistant || (s.assistant && s.assistant.toUpperCase().includes(filters.assistant.toUpperCase()))) && 
-        (!filters.level || (s.level && s.level.toUpperCase().includes(filters.level.toUpperCase()))) &&
-        (!filters.time || (s.time && s.time.toUpperCase().includes(filters.time.toUpperCase())));
+        (!filters.teacher || String(s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase()) || String(s.teacher || '').toUpperCase().includes(filters.teacher.toUpperCase())) && 
+        (!filters.assistant || String(s.assistant || '').toUpperCase().includes(filters.assistant.toUpperCase())) && 
+        (!filters.level || String(s.level || '').toUpperCase().includes(filters.level.toUpperCase())) &&
+        (!filters.time || String(s.time || '').toUpperCase().includes(filters.time.toUpperCase()));
     });
 
     if (sortConfig) {
@@ -407,10 +410,10 @@ export const AttendanceTable: React.FC<Props> = ({
       </div>
 
       {/* Main Table Grid */}
-      <div className="flex-1 bg-white/[0.02] backdrop-blur-[2px] rounded-[40px] shadow-2xl shadow-indigo-900/10 border border-white/5 overflow-hidden flex flex-col">
+      <div className="flex-1 bg-white/80 backdrop-blur-md rounded-[40px] shadow-2xl shadow-indigo-900/10 border border-white/20 overflow-hidden flex flex-col">
         <div className="overflow-auto flex-1 custom-scrollbar">
           <table className="w-full border-collapse table-fixed min-w-[1200px]">
-            <thead className="sticky top-0 z-40 bg-white/[0.02] backdrop-blur-[2px] border-b border-white/5">
+            <thead className="sticky top-0 z-40 bg-slate-50/80 backdrop-blur-md border-b border-slate-200/50">
               <tr>
                 <th className="w-10 h-10 border-r border-white/5 sticky top-0 bg-white/[0.02] backdrop-blur-[2px] text-center">
                   <button onClick={() => setSelectedIds(selectedIds.size === filteredStudents.length ? new Set() : new Set(filteredStudents.map(s => s.id)))}>

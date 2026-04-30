@@ -160,6 +160,7 @@ export const DailyTaskTable: React.FC<DailyTaskTableProps> = ({
                            (s.level || '').toLowerCase().includes(query) ||
                            (s.shift || '').toLowerCase().includes(query) ||
                            (s.teachers || '').toLowerCase().includes(query) ||
+                           (s.teacher || '').toLowerCase().includes(query) ||
                            (s.assistant || '').toLowerCase().includes(query) ||
                            (s.time || '').toLowerCase().includes(query);
       if (!matchesSearch) return false;
@@ -224,15 +225,15 @@ export const DailyTaskTable: React.FC<DailyTaskTableProps> = ({
   };
 
   const getRowBg = (assistantName?: string) => {
-    if (!assistantName) return 'bg-slate-50 border-white/5';
+    if (!assistantName) return 'bg-white border-slate-200';
     const colors = [
-      'bg-emerald-400/10',
-      'bg-amber-400/10',
-      'bg-indigo-400/10',
-      'bg-rose-400/10',
-      'bg-violet-400/10',
-      'bg-teal-400/10',
-      'bg-orange-400/10'
+      'bg-emerald-400/90',
+      'bg-amber-400/90',
+      'bg-indigo-400/90',
+      'bg-rose-400/90',
+      'bg-violet-400/90',
+      'bg-teal-400/90',
+      'bg-orange-400/90'
     ];
     let hash = 0;
     for (let i = 0; i < assistantName.length; i++) {
@@ -352,10 +353,10 @@ export const DailyTaskTable: React.FC<DailyTaskTableProps> = ({
             </div>
 
             {/* Main Spreadsheet Content */}
-            <div className="flex-1 bg-white/5 backdrop-blur-[2px] rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-white/10">
+            <div className="flex-1 bg-white/80 backdrop-blur-md rounded-[40px] shadow-2xl overflow-hidden flex flex-col border border-white/10">
                 <div className="overflow-auto flex-1 custom-scrollbar">
                     <table className="w-full border-collapse table-fixed min-w-[1500px]">
-                        <thead className="sticky top-0 z-40 bg-white/10 backdrop-blur-md">
+                        <thead className="sticky top-0 z-40 bg-slate-50/80 backdrop-blur-md">
                             <tr className="border-b border-white/5 uppercase text-[9px] font-black text-slate-800">
                                 <th className="w-10 py-5 text-center border-r border-white/5">#</th>
                                 <th className={`px-6 py-5 text-left border-r border-white/5 sticky left-0 z-50 transition-all group ${isFrozen ? 'bg-white/90 backdrop-blur-md shadow-[2px_0_5px_rgba(0,0,0,0.1)]' : 'bg-inherit'}`} style={{ width: studentNameWidth }}>

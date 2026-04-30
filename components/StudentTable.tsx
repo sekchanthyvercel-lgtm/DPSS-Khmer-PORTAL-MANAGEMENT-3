@@ -99,20 +99,20 @@ const isDeadlineDue = (deadline: string) => {
 };
 
 const ASSISTANT_PALETTE = [
-  'rgba(224, 242, 254, 0.15)', // Sky
-  'rgba(240, 253, 244, 0.15)', // Emerald
-  'rgba(254, 252, 232, 0.15)', // Amber
-  'rgba(250, 245, 255, 0.15)', // Purple
-  'rgba(255, 247, 237, 0.15)', // Orange
-  'rgba(253, 242, 248, 0.15)', // Pink
-  'rgba(240, 253, 250, 0.15)', // Teal
-  'rgba(245, 243, 255, 0.15)', // Indigo
-  'rgba(236, 253, 245, 0.15)', // Mint
-  'rgba(255, 241, 242, 0.15)'  // Rose
+  'rgba(224, 242, 254, 0.95)', // Sky
+  'rgba(240, 253, 244, 0.95)', // Emerald
+  'rgba(254, 252, 232, 0.95)', // Amber
+  'rgba(250, 245, 255, 0.95)', // Purple
+  'rgba(255, 247, 237, 0.95)', // Orange
+  'rgba(253, 242, 248, 0.95)', // Pink
+  'rgba(240, 253, 250, 0.95)', // Teal
+  'rgba(245, 243, 255, 0.95)', // Indigo
+  'rgba(236, 253, 245, 0.95)', // Mint
+  'rgba(255, 241, 242, 0.95)'  // Rose
 ];
 
 const getAssistantBgColor = (assistant: string): string => {
-  if (!assistant) return 'rgba(248, 250, 252, 0.1)';
+  if (!assistant) return 'rgba(255, 255, 255, 0.9)';
   let hash = 0;
   for (let i = 0; i < assistant.length; i++) {
     hash = assistant.charCodeAt(i) + ((hash << 5) - hash);
@@ -153,11 +153,15 @@ export const StudentTable: React.FC<StudentTableProps> = ({
             columns.some(col => String(s[col.key] || '').toLowerCase().includes(query)) ||
             String(s.name || '').toLowerCase().includes(query) ||
             String(s.assistant || '').toLowerCase().includes(query) ||
-            String(s.teachers || '').toLowerCase().includes(query);
+            String(s.teachers || '').toLowerCase().includes(query) ||
+            String(s.teacher || '').toLowerCase().includes(query) ||
+            String(s.level || '').toLowerCase().includes(query) ||
+            String(s.behavior || '').toLowerCase().includes(query);
         
         // Exact Teacher filtering
         const matchesTeacher = !filters.teacher || 
-            String(s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase());
+            String(s.teachers || '').toUpperCase().includes(filters.teacher.toUpperCase()) ||
+            String(s.teacher || '').toUpperCase().includes(filters.teacher.toUpperCase());
             
         // Exact Assistant filtering (usually selected from list, but let's be robust)
         const matchesAssistant = !filters.assistant || 
@@ -418,10 +422,10 @@ export const StudentTable: React.FC<StudentTableProps> = ({
       </div>
 
       <div className="flex-1 overflow-auto bg-transparent p-4 custom-scrollbar">
-          <div className="h-full bg-white/[0.01] backdrop-blur-[1px] border border-white/5 rounded-2xl shadow-xl overflow-auto relative custom-scrollbar">
-              <table className="border-collapse table-fixed bg-transparent" style={{ width: totalWidth, minWidth: '100%' }}>
+          <div className="h-full bg-white/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-auto relative custom-scrollbar">
+              <table className="border-collapse table-fixed w-full" style={{ width: totalWidth, minWidth: '100%' }}>
                   <thead>
-                    <tr className="bg-white/[0.01] border-b border-white/5 h-10 backdrop-blur-[1px]">
+                    <tr className="bg-slate-50/50 border-b border-slate-200/50 h-10 backdrop-blur-sm">
                         <th className={`border-r border-white/5 sticky top-0 z-40 bg-white/[0.01]`} style={{ width: 45 }}>
                             <button onClick={() => setSelectedIds(selectedIds.size === filteredStudents.length ? new Set() : new Set(filteredStudents.map(s => s.id)))}>
                                 {selectedIds.size > 0 ? <CheckSquare size={16} className="text-primary-500 mx-auto" /> : <Square size={16} className="text-slate-900/30 mx-auto" />}
@@ -436,6 +440,7 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                         </th>
                         
                         {columns.map((col, idx) => {
+                            if (!col.visible) return null;
                             let stickyLeft = isFrozen && idx === 0 ? studentNameWidth : undefined;
                             const isSorted = sortConfig?.key === col.key;
                             return (
@@ -468,17 +473,17 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                           let textColor = '#0f172a';
                           
                           if (deadlineDue) {
-                              rowBg = 'rgba(255, 237, 213, 0.15)'; // Orange (Orange 100)
+                              rowBg = 'rgba(255, 237, 213, 0.95)'; // Orange (Orange 100)
                               textColor = '#c2410c'; // High contrast dark orange text
                           }
                           
                           if (s.headTeacher) {
-                              rowBg = 'rgba(254, 226, 226, 0.15)'; // Red (Red 100)
+                              rowBg = 'rgba(254, 226, 226, 0.95)'; // Red (Red 100)
                               textColor = '#b91c1c'; // High contrast dark red text
                           }
 
                           if (s.isHidden) {
-                              rowBg = 'rgba(248, 250, 252, 0.1)';
+                              rowBg = 'rgba(248, 250, 252, 0.9)';
                               textColor = '#475569';
                           }
 
@@ -508,6 +513,7 @@ export const StudentTable: React.FC<StudentTableProps> = ({
                                 </td>
                                 
                                 {columns.map((col, idx) => {
+                                    if (!col.visible) return null;
                                     return (
                                       <td 
                                           key={col.id} 
