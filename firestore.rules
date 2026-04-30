@@ -21,7 +21,7 @@ service cloud.firestore {
         && data.moduleLocks is map
         && data.staffDirectory is map
         && data.systemLocked is bool
-        && data.updatedAt is string;
+        && (data.updatedAt is string || data.updatedAt is timestamp);
     }
 
     // --- Collections ---

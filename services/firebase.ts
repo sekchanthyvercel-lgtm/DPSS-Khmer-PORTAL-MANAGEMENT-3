@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, onSnapshot, setDoc, getDocFromServer } from 'firebase/firestore';
+import { getFirestore, doc, onSnapshot, setDoc, getDocFromServer, serverTimestamp } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth'; 
 import { AppData, BackupEntry } from '../types';
 import firebaseConfig from '../firebase-applet-config.json';
@@ -90,7 +90,7 @@ export const subscribeToData = (
         moduleLocks: {},
         staffDirectory: {},
         systemLocked: false,
-        updatedAt: new Date().toISOString()
+        updatedAt: serverTimestamp() as any
       };
       setDoc(docRef, initialData).catch(err => handleFirestoreError(err, OperationType.CREATE, DOC_PATH));
       onData(initialData);
@@ -106,7 +106,7 @@ export const subscribeToData = (
 export const saveData = async (data: AppData) => {
   const docRef = doc(db, DOC_PATH);
   try {
-    await setDoc(docRef, { ...data, updatedAt: new Date().toISOString() }, { merge: true });
+    await setDoc(docRef, { ...data, updatedAt: serverTimestamp() }, { merge: true });
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, DOC_PATH);
   }
