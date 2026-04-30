@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidAppData(data) {
+      return data.keys().hasAll(['students', 'settings', 'attendance', 'moduleLocks', 'staffDirectory', 'systemLocked', 'updatedAt'])
+        && data.students is list && data.students.size() <= 500
+        && data.settings is map
+        && data.attendance is map
+        && data.moduleLocks is map
+        && data.staffDirectory is map
+        && data.systemLocked is bool
+        && data.updatedAt is string;
+    }
+
+    // --- Collections ---
+    
+    // Portal/Data Document
+    match /portal/data {
+      allow read: if isSignedIn();
+      
+      allow create: if isSignedIn() 
+                    && isValidAppData(incoming())
+                    && incoming().updatedAt == request.time;
+      
+      allow update: if isSignedIn()
+                    && isValidAppData(incoming())
+                    && incoming().updatedAt == request.time
+                    && incoming().systemLocked == existing().systemLocked;
+      
+      allow delete: if false;
+    }
+
+    // Needed for the app to verify the database connection on startup
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Safety for other potential documents within the portal
+    match /portal/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isValidId(docId) && docId != 'data';
+    }
+  }
+}

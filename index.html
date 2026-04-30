@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DPS School Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Poppins:wght@300;400;500;600;700;900&family=Montserrat:wght@300;400;500;600;700;900&family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Merriweather:wght@300;400;700;900&family=Lora:wght@400;500;600;700&family=Kantumruy+Pro:wght@300;400;500;600;700&family=Moul&family=Freehand&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                50: '#fff7ed',
+                100: '#ffedd5',
+                200: '#fed7aa',
+                300: '#fdba74',
+                400: '#fb923c',
+                500: '#f97316', // Core Brand Color
+                600: '#ea580c',
+                700: '#c2410c',
+                800: '#9a3412',
+                900: '#7c2d12',
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar for heavy tables */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8; 
+      }
+
+      /* Hide scrollbar utility */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      
+      /* Animation for Superhero LTR */
+      @keyframes flyAcross {
+        0% { transform: translate(-100vw, 20vh) rotate(5deg) scale(0.5); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translate(100vw, -20vh) rotate(5deg) scale(1); opacity: 0; }
+      }
+      
+      /* Animation for Superhero RTL */
+      @keyframes flyAcrossRTL {
+        0% { transform: translate(100vw, 20vh) rotate(-5deg) scale(0.5) scaleX(-1); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translate(-100vw, -20vh) rotate(-5deg) scale(1) scaleX(-1); opacity: 0; }
+      }
+
+      .flying-hero-ltr {
+        animation: flyAcross 10s linear forwards;
+      }
+      
+      .flying-hero-rtl {
+        animation: flyAcrossRTL 10s linear forwards;
+      }
+
+      /* PRINT SPECIFIC STYLES FOR EXPORTING ID CARDS */
+      @media print {
+        /* Hide everything by default */
+        body * {
+          visibility: hidden;
+          margin: 0;
+          padding: 0;
+        }
+
+        /* Specifically show the print area */
+        .id-print-area, .id-print-area * {
+          visibility: visible;
+        }
+
+        /* Layout for printing cards */
+        .id-print-area {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          display: grid !important;
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 20px !important;
+          padding: 20px !important;
+          background: white !important;
+          visibility: visible !important;
+        }
+
+        /* Ensure card wrapper handles breaks */
+        .print-card-wrapper {
+          page-break-inside: avoid;
+          margin-bottom: 20px;
+        }
+
+        /* Hide specific elements marked as no-print */
+        .no-print {
+          display: none !important;
+        }
+
+        /* Remove scaling for print */
+        .scale-\[0\.85\] {
+          transform: scale(1) !important;
+        }
+
+        /* Remove shadows and backgrounds of the app that are not the cards */
+        #root {
+          background: white !important;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "firebase/": "https://esm.sh/firebase@^12.6.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "uuid": "https://esm.sh/uuid@^13.0.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "date-fns": "https://esm.sh/date-fns@^4.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-transparent text-slate-800 antialiased overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2000'); background-size: cover; background-position: center; background-attachment: fixed;">
+    <div id="root" class="min-h-screen bg-transparent"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
